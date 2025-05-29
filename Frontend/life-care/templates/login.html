@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Brain Tumor Classification</title>
+    <link rel="shortcut icon" href="static/images/fevicon.ico.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="static/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/css/colors.css">
+    <link rel="stylesheet" href="static/css/versions.css">
+    <link rel="stylesheet" href="static/css/responsive.css">
+    <link rel="stylesheet" href="static/css/custom.css">
+    <script src="static/js/modernizer.js"></script>
+    <style>
+      .form-container { display: none; }
+      .form-container.active { display: block; }
+      .auth_section { 
+          display: flex; 
+          justify-content: center; 
+          min-height: 100vh; 
+          padding-top: 100px; /* Adjust as needed */
+          background-image: url('static/images/blue paper.jpg'); /* Add your image path */
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+      }
+      .form-box { 
+          background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+          padding: 20px; 
+          border-radius: 8px; 
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); 
+          width: 100%; 
+          max-width: 500px;
+          margin-top: 70px; 
+          margin-bottom: 70px; /* Added margin-bottom for spacing */
+      }
+      .form-box h2 { margin-bottom: 20px; font-size: 24px; font-weight: 700; }
+      .form-box .form-group { margin-bottom: 15px; }
+      .form-box .btn { width: 100%; }
+      .form-box p { margin-top: 15px; text-align: center; }
+      .form-box p a { color: #007bff; text-decoration: none; }
+      .form-box p a:hover { text-decoration: underline; }
+      .alert-container { margin-bottom: 20px; }
+      .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+      .alert-success { background-color: #d4edda; color: #155724; }
+      .alert-danger { background-color: #f8d7da; color: #721c24; }
+      .alert-info { background-color: #d1ecf1; color: #0c5460; }
+  </style>
+</head>
+<body class="clinic_version">
+   <!-- Preloader -->
+   <div id="preloader">
+       <img class="preloader" src="static/images/loaders/heart-loading2.gif" alt="">
+   </div>
+   <!-- End Preloader -->
+
+   <!-- Header -->
+   <header>
+       
+       <!-- Navigation Bar -->
+       <div class="header-bottom wow fadeIn">
+           <div class="container">
+               <nav class="main-menu">
+                   <div class="navbar-header">
+                       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                           <i class="fa fa-bars" aria-hidden="true"></i>
+                       </button>
+                   </div>
+                   <div id="navbar" class="navbar-collapse collapse">
+                       <ul class="nav navbar-nav">
+                           <li><a class="active" href="{{url_for('index')}}">Home</a></li>
+                           <li><a data-scroll href="{{url_for('about')}}">About us</a></li>
+                           <li><a data-scroll href="{{url_for('login')}}">Login</a></li>
+                       </ul>
+                   </div>
+               </nav>
+           </div>
+       </div>
+       <!-- End Navigation Bar -->
+   </header>
+   <!-- End Header -->
+
+   <!-- Authentication Section -->
+   <section id="auth-section" class="auth_section">
+       <div class="form-box">
+           <div class="alert-container">
+               {% with messages = get_flashed_messages(with_categories=True) %}
+                   {% if messages %}
+                       {% for category, message in messages %}
+                           <div class="alert alert-{{ category }}">{{ message }}</div>
+                       {% endfor %}
+                   {% endif %}
+               {% endwith %}
+           </div>
+           <!-- Login Form -->
+           <div id="login-form" class="form-container active">
+               <h2>Login</h2>
+               <form action="{{ url_for('login') }}" method="POST">
+                   <div class="form-group">
+                       <label for="email_login">Email address</label>
+                       <input type="email" class="form-control" id="email_login" name="email" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="password_login">Password</label>
+                       <input type="password" class="form-control" id="password_login" name="password" required>
+                   </div>
+                   <button type="submit" class="btn btn-primary">Login</button>
+                   <p><a href="#" onclick="showRegisterForm()">Create an Account</a></p>
+               </form>
+           </div>
+           <!-- End Login Form -->
+
+           <!-- Register Form -->
+           <div id="register-form" class="form-container">
+               <h2>Register</h2>
+               <form action="{{ url_for('register') }}" method="POST">
+                   <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="email_reg">Email address</label>
+                       <input type="email" class="form-control" id="email_reg" name="email" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="password_reg">Password</label>
+                       <input type="password" class="form-control" id="password_reg" name="password" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="confirm_password_reg">Confirm Password</label>
+                       <input type="password" class="form-control" id="confirm_password_reg" name="confirm_password" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="age_reg">Age</label>
+                       <input type="number" class="form-control" id="age_reg" name="age" required>
+                   </div>
+                   <div class="form-group">
+                       <label for="gender_reg">Gender</label>
+                       <select class="form-control" id="gender_reg" name="gender" required>
+                           <option value="">Select Gender</option>
+                           <option value="M">Male</option>
+                           <option value="F">Female</option>
+                           <option value="O">Other</option>
+                       </select>
+                   </div>
+                   <div class="form-group">
+                       <label for="mobile_reg">Mobile Number</label>
+                       <input type="text" class="form-control" id="mobile_reg" name="mobile" required>
+                   </div>
+                   <button type="submit" class="btn btn-primary">Register</button>
+                   <p><a href="#" onclick="showLoginForm()">Back to Login</a></p>
+               </form>
+           </div>
+           <!-- End Register Form -->
+       </div>
+   </section>
+   <!-- End Authentication Section -->
+
+   <!-- Scroll to Top Button -->
+   <a href="#home" data-scroll class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
+   <!-- End Scroll to Top Button -->
+
+   <!-- Scripts -->
+   <script src="static/js/all.js"></script>
+   <script src="static/js/custom.js"></script>
+   <script>
+       function showLoginForm() {
+           document.getElementById('login-form').classList.add('active');
+           document.getElementById('register-form').classList.remove('active');
+           // Scroll to the top of the form
+           document.getElementById('auth-section').scrollIntoView();
+       }
+       function showRegisterForm() {
+           document.getElementById('login-form').classList.remove('active');
+           document.getElementById('register-form').classList.add('active');
+           // Scroll to the top of the form
+           document.getElementById('auth-section').scrollIntoView();
+       }
+   </script>
+   <!-- End Scripts -->
+</body>
+</html>
